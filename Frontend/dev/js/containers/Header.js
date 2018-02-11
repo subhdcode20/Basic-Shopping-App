@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router'
 import {
   Grid,
   Form,
@@ -28,17 +29,26 @@ class Headernav extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeItem: 'product'
+      activeItem: 'product',
+      redirectUrl: {
+        "cart" : "/cart",
+        "home" : "/home",
+      }
     }
     this.handleItemClick = this.handleItemClick.bind(this)
   }
 
-  handleItemClick() {
-console.log('handleItemClick click');
+  handleItemClick(e, {name}) {
+    console.log('handleItemClick click');
+    let urls = this.state.redirectUrl
+    this.setState({activeItem: name, redirectUrl: urls[name]}, ()=> {
+      console.log('redirect url=', this.state.redirectUrl);
+    })
   }
 
     render() {
       let {activeItem} = this.state
+      console.log('cartItems in header', this.props.cartItems);
       return (<Grid container>
         <Grid.Row textAlign="center" verticalAlign="middle">
         <Grid.Column textAlign="center" verticalAlign="middle" width={6}>
@@ -62,10 +72,13 @@ console.log('handleItemClick click');
               <Menu.Item
                 name='cart'
                 active={activeItem === 'cart'}
-                content='Cart'
+                content={'Cart ' + this.props.cartItems.length}
                 onClick={this.handleItemClick}
               />
             </Menu>
+          </Grid.Column>
+          <Grid.Column>
+            <Redirect to={this.state.redirectUrl} />
           </Grid.Column>
         </Grid.Row>
       </Grid>)

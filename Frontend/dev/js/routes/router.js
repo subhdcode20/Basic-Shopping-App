@@ -6,6 +6,7 @@ import {Router,BrowserRouter , Route} from 'react-router-dom';
 
 import Parent from "AppContainers/Parent"
 import Login from "AppContainers/Login"
+import Cart from "AppContainers/Cart"
 
 const history = createBrowserHistory()
 
@@ -18,8 +19,9 @@ class AllRoutes extends Component {
       return(
           <BrowserRouter history={history}>
             <Switch>
-              <Route exact path='/login' component={Login}/>
               <Route exact path='/' component={Parent}/>
+              <Route exact path='/login' component={Login}/>
+              <Route exact path='/cart' component={Cart}/>
             </Switch>
           </BrowserRouter>
       )

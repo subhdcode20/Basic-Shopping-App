@@ -10,6 +10,9 @@ module.exports = {
     },
     devtool: 'cheap-module-eval-source-map',
     entry: './dev/js/index.js',
+    node: {
+      fs: 'empty'
+    },
     module: {
         loaders: [
             {
@@ -33,6 +36,10 @@ module.exports = {
             {
               test: /\.(woff|woff2|eot|ttf|otf)$/,
               loader: 'file-loader'
+            },
+            {
+              test: /\.json($|\?)/,
+              loader: 'json-loader'
             }
         ]
     },

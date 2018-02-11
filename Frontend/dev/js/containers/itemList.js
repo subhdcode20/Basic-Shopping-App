@@ -11,8 +11,11 @@ import {
   Header,
   Button,
   Divider,
-  Container
+  Container,
+  Image
 } from 'semantic-ui-react'
+import _ from 'lodash'
+import FontAwesome from 'react-fontawesome'
 
 var classes = {
 
@@ -28,26 +31,64 @@ class ItemList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: {
-        email: '',
-        password: ''
-      }
+      items: []
     }
+    this.handleAddtoCart = this.handleAddtoCart.bind(this)
+  }
+  handleAddtoCart(productId) {
+    this.props.handleAddtoCart(productId)
+  }
+  componentWillMount() {
+    this.setState({items: this.props.products}, ()=> {
+      console.log('items in itemlist set=', this.state.items);
+    })
+  }
+  coponentWillRecieveProps(nextProps) {
+    this.setState({items: nextProps.products}, ()=> {
+      console.log('items in itemlist set=', this.state.items);
+    })
   }
 
     render() {
+      console.log('itemlist render=', this.state.items, this.props);
+      let {items} = this.state
       return (
       <Grid container>
         <Grid.Row textAlign="center" verticalAlign="middle">
           <Grid.Column textAlign="center" verticalAlign="middle" width={16}>
 
-            <Grid container>
-              <Grid.Row textAlign="center" verticalAlign="middle">
-                <Grid.Column textAlign="center" verticalAlign="middle" width={5}>
+          <Grid container>
+            <Grid.Row textAlign="center" verticalAlign="middle">
 
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+                  {
+                    items.map(item => (
+                      <Grid.Column key={item.id} textAlign="center" verticalAlign="middle" width={5}>
+                      <Card>
+                      <Card.Content>
+                        <Image floated='right' size='mini' src='/assets/banana.jpg' />
+                        <Card.Header>
+                          {_.capitalize(item.name)}
+                        </Card.Header>
+                        <Card.Meta>
+                         {item.description}
+                        </Card.Meta>
+                        <Card.Description>
+                          {/**<FontAwesome name={item.price[0].currency.toLowerCase()}/>**/}
+                          {item.price[0].amount} {item.price[0].currency}
+                        </Card.Description>
+                      </Card.Content>
+                      <Card.Content extra>
+                        <div className='ui two buttons'>
+                          <Button basic color='green' onClick={e=>this.handleAddtoCart(item.id)}>Add to Cart</Button>
+                          <Button basic color='red'>Buy Now</Button>
+                        </div>
+                      </Card.Content>
+                    </Card>
+                    </Grid.Column>
+                  ))
+                }
+            </Grid.Row>
+          </Grid>
 
           </Grid.Column>
         </Grid.Row>
