@@ -65,22 +65,20 @@ class ItemList extends Component {
                       <Grid.Column key={item.id} textAlign="center" verticalAlign="middle" width={5}>
                       <Card>
                       <Card.Content>
-                        <Image floated='right' size='mini' src='/assets/banana.jpg' />
                         <Card.Header>
                           {_.capitalize(item.name)}
                         </Card.Header>
                         <Card.Meta>
-                         {item.description}
+                         {item.description} <br />
+                         {item.meta.stock.availability} {item.meta.stock.level}
                         </Card.Meta>
                         <Card.Description>
-                          {/**<FontAwesome name={item.price[0].currency.toLowerCase()}/>**/}
-                          {item.price[0].amount} {item.price[0].currency}
+                          {item.meta.display_price.with_tax.formatted}  {item.price[0].amount} {item.price[0].currency}
                         </Card.Description>
                       </Card.Content>
                       <Card.Content extra>
                         <div className='ui two buttons'>
                           <Button basic color='green' onClick={e=>this.handleAddtoCart(item.id)}>Add to Cart</Button>
-                          <Button basic color='red'>Buy Now</Button>
                         </div>
                       </Card.Content>
                     </Card>

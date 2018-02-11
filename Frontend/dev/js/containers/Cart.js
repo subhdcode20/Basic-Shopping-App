@@ -121,7 +121,6 @@ class ItemList extends Component {
                         <Grid.Column key={item.id} textAlign="center" verticalAlign="middle" width={5}>
                         <Card>
                         <Card.Content>
-                          <Image floated='right' size='mini' src='/assets/banana.jpg' />
                           <Card.Header>
                             {_.capitalize(item.name)}
                           </Card.Header>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Redirect} from 'react-router'
+import {Redirect, withRouter} from 'react-router'
 import {
   Grid,
   Form,
@@ -29,10 +29,10 @@ class Headernav extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeItem: 'product',
+      activeItem: '',
       redirectUrl: {
         "cart" : "/cart",
-        "home" : "/home",
+        "home" : "/",
       }
     }
     this.handleItemClick = this.handleItemClick.bind(this)
@@ -41,14 +41,18 @@ class Headernav extends Component {
   handleItemClick(e, {name}) {
     console.log('handleItemClick click');
     let urls = this.state.redirectUrl
+    console.log('new url=', urls[name]);
     this.setState({activeItem: name, redirectUrl: urls[name]}, ()=> {
       console.log('redirect url=', this.state.redirectUrl);
+      this.props.history.push(this.state.redirectUrl)
     })
   }
 
     render() {
       let {activeItem} = this.state
-      console.log('cartItems in header', this.props.cartItems);
+      console.log('cartItems in header', this.props, this.state);
+      let cartTotalItems = this.props.cartItems.length
+
       return (<Grid container>
         <Grid.Row textAlign="center" verticalAlign="middle">
         <Grid.Column textAlign="center" verticalAlign="middle" width={6}>
@@ -72,13 +76,13 @@ class Headernav extends Component {
               <Menu.Item
                 name='cart'
                 active={activeItem === 'cart'}
-                content={'Cart ' + this.props.cartItems.length}
+                content={'Cart ' + cartTotalItems}
                 onClick={this.handleItemClick}
               />
             </Menu>
           </Grid.Column>
           <Grid.Column>
-            <Redirect to={this.state.redirectUrl} />
+            {this.state.activeItem && <Redirect to={this.state.redirectUrl[activeItem]} />}
           </Grid.Column>
         </Grid.Row>
       </Grid>)
@@ -92,4 +96,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Headernav);
+export default withRouter(connect(mapStateToProps)(Headernav));

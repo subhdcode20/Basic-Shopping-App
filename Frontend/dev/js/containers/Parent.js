@@ -39,7 +39,7 @@ class Parent extends Component {
       console.log("products= ",products);
       that.setState({products: products.data})
       Moltin.Cart().Items().then(cart => {
-        that.setState({cartItems: cart})
+        that.setState({cartItems: cart.data})
       })
     });
   }
@@ -50,7 +50,7 @@ class Parent extends Component {
       console.log("added to cart", item);
       Moltin.Cart().Items().then(cart => {
         console.log('cart items=', cart);
-        that.setState({cartItems: cart})
+        that.setState({cartItems: cart.data})
       })
       alert(`Added ${item.data.length} items to your cart`);
     });
