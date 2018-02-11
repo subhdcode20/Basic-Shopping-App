@@ -34,7 +34,22 @@ class ItemList extends Component {
     super(props)
     this.state = {
       cartItems: [],
-      cartMetaData: {}
+      cartMetaData: {},
+      showAddressInput: false,
+      address: {
+        first_name: 'Customer',
+        last_name: 'vVents',
+        line_1: '123 Sunny Street',
+        line_2: 'Sunnycreek',
+        county: 'California',
+        postcode: 'CA94040',
+        country: 'US'
+      },
+      customer: {
+        email: 'customer@vvents.com',
+        name: 'Customer vVents'
+      }
+
     }
     this.handleAddressInput = this.handleAddressInput.bind(this)
     this.handlePayOrder = this.handlePayOrder.bind(this)
@@ -43,7 +58,24 @@ class ItemList extends Component {
     // this.props.handleAddressInput(productId)
   }
   handlePayOrder() {
+    // this.setState({showAddressInput: true})
+    let {customer, address} = this.state
+    var order = Moltin.Cart().Checkout(customer, address).then(order => {
+      console.log("order", order);
+      Moltin.Orders.Payment(order.data.id, {
+        gateway: 'stripe',
+        method: 'purchase',
+        first_name: 'Customer',
+        last_name: 'vVents',
+        number: '4242424242424242',
+        month: '02',
+        year: '2020',
+        verification_value: '123'
+      })
+      .then(result => {
 
+      })
+    })
   }
   componentWillMount() {
     Moltin.Cart().Items().then(cart => {
@@ -118,6 +150,48 @@ class ItemList extends Component {
 
           </Grid.Column>
         </Grid.Row>
+        {
+          this.state.showAddressInput &&
+          (<Grid.Row textAlign="center" verticalAlign="middle">
+            <Grid.Column textAlign="center" verticalAlign="middle" width={5} floated="left" with={16}>
+              Enter Shipping Address:
+            </Grid.Column>
+            <Grid.Column textAlign="center" verticalAlign="middle" width={5} floated="left" with={16}>
+              <Segment size='large' raised={true}>
+                <Header as='h3' style={{'fontSize': '16px'}} >
+                  {"Login"}
+                </Header>
+                <Form>
+                      <Form.Field
+                        classname={classes.logintext}
+                        control={Input}
+                        value={this.state.user.email}
+                        name='address'
+                        type='address'
+                        label='Address'
+                        placeholder='23 Sunny Street, SunnyCreek'
+                        onChange={this.onChange}
+                        required />
+
+                        <Form.Field
+                          classname={classes.logintext}
+                          control={Input}
+                          value={this.state.user.password}
+                          name='password'
+                          type='password'
+                          label='Password'
+                          placeholder='********'
+                          onChange={this.onChange}
+                          required />
+                      <br/>
+                </Form>
+                <Button content="Login" size="huge" onClick={this.handleLogin} />
+                <br/>
+                <br/>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>)
+        }
       </Grid>)
     }
 }
